@@ -1,0 +1,394 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=Sora:wght@400;500;600&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --accent:#C0392B;--accent-light:#F7E6E5;--accent-muted:#E8A09A;
+    --warn:#E67E22;--warn-light:#FDF0E0;
+    --ok:#1A7A5E;--ok-light:#E2F4ED;
+    --blue:#1F6FAB;--blue-light:#E8F3FB;
+    --purple:#6C3D9E;--purple-light:#F2ECF9;
+    --gray0:var(--color-background-primary);
+    --gray1:var(--color-background-secondary);
+    --gray2:var(--color-background-tertiary);
+    --text:var(--color-text-primary);
+    --muted:var(--color-text-secondary);
+    --border:var(--color-border-tertiary);
+  }
+  body{font-family:'Sora',sans-serif;font-size:14px;line-height:1.7;color:var(--text);background:transparent;padding:0 0 2rem}
+
+  .header{padding:2rem 1.5rem 1.5rem;border-bottom:0.5px solid var(--border);position:relative;overflow:hidden}
+  .header::before{content:'';position:absolute;top:0;right:0;width:200px;height:100%;background:linear-gradient(135deg,transparent,var(--accent-light));opacity:.35;pointer-events:none}
+  .badge-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .badge{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;letter-spacing:.03em}
+  .badge-red{background:var(--accent-light);color:var(--accent)}
+  .badge-warn{background:var(--warn-light);color:var(--warn)}
+  .badge-ok{background:var(--ok-light);color:var(--ok)}
+  .badge-blue{background:var(--blue-light);color:var(--blue)}
+  .badge-purple{background:var(--purple-light);color:var(--purple)}
+  .header h1{font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;line-height:1.3;margin-bottom:6px;color:var(--text)}
+  .header .subtitle{font-size:13px;color:var(--muted)}
+  .header .date-chip{display:inline-block;font-size:11px;font-family:'DM Mono',monospace;color:var(--accent);background:var(--accent-light);padding:2px 8px;border-radius:4px;margin-top:6px}
+
+  .nav{display:flex;gap:4px;padding:12px 1.5rem;border-bottom:0.5px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .nav::-webkit-scrollbar{display:none}
+  .nav-btn{white-space:nowrap;font-size:12px;font-family:'Sora',sans-serif;font-weight:500;padding:5px 12px;border-radius:20px;border:0.5px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s}
+  .nav-btn:hover{background:var(--gray1);color:var(--text)}
+  .nav-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+  .section{display:none;padding:1.5rem;animation:fadeIn .25s ease}
+  .section.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+  .section-title{font-family:'DM Serif Display',serif;font-size:18px;font-weight:400;margin-bottom:1rem;color:var(--text)}
+  .section-sub{font-size:13px;color:var(--muted);margin-bottom:1rem}
+
+  .card{background:var(--gray1);border-radius:10px;border:0.5px solid var(--border);padding:1rem 1.25rem;margin-bottom:12px}
+  .card-title{font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+  .card p{font-size:13.5px;line-height:1.7;color:var(--text)}
+
+  .exec-highlight{background:var(--accent-light);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:1rem 1.25rem;margin-bottom:12px}
+  .exec-highlight p{font-size:14px;line-height:1.7;color:var(--text)}
+
+  .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+  @media(max-width:480px){.info-grid{grid-template-columns:1fr}}
+  .info-item{background:var(--gray1);border-radius:8px;border:0.5px solid var(--border);padding:.75rem 1rem}
+  .info-item .lbl{font-size:11px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+  .info-item .val{font-size:13px;font-weight:500;color:var(--text)}
+
+  .grc-block{border-radius:10px;border:0.5px solid var(--border);padding:1rem 1.25rem;margin-bottom:10px}
+  .grc-block.gov{border-left:3px solid var(--purple);background:var(--purple-light)}
+  .grc-block.risk{border-left:3px solid var(--warn);background:var(--warn-light)}
+  .grc-block.comp{border-left:3px solid var(--blue);background:var(--blue-light)}
+  .grc-block h3{font-size:13px;font-weight:600;margin-bottom:8px}
+  .grc-block.gov h3{color:var(--purple)}
+  .grc-block.risk h3{color:var(--warn)}
+  .grc-block.comp h3{color:var(--blue)}
+  .grc-block ul{list-style:none;padding:0}
+  .grc-block ul li{font-size:13px;color:var(--text);padding:3px 0 3px 16px;position:relative;line-height:1.6}
+  .grc-block ul li::before{content:'→';position:absolute;left:0;color:var(--muted);font-size:11px;top:4px}
+
+  .framework-row{display:flex;gap:8px;align-items:flex-start;padding:10px 0;border-bottom:0.5px solid var(--border)}
+  .framework-row:last-child{border-bottom:none}
+  .fw-badge{min-width:80px;font-size:11px;font-weight:500;padding:4px 8px;border-radius:6px;text-align:center;flex-shrink:0}
+  .fw-iso{background:var(--purple-light);color:var(--purple)}
+  .fw-soc{background:var(--blue-light);color:var(--blue)}
+  .fw-gdpr{background:var(--warn-light);color:var(--warn)}
+  .fw-nist{background:var(--ok-light);color:var(--ok)}
+  .fw-text{font-size:13px;color:var(--text);line-height:1.6}
+  .fw-control{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);display:block;margin-top:2px}
+
+  .risk-matrix{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+  .risk-cell{padding:.75rem 1rem;border-radius:8px;border:0.5px solid var(--border)}
+  .risk-cell .metric{font-size:22px;font-weight:600}
+  .risk-cell .label{font-size:12px;color:var(--muted);margin-top:2px}
+  .risk-cell.high{background:var(--accent-light)}.risk-cell.high .metric{color:var(--accent)}
+  .risk-cell.med{background:var(--warn-light)}.risk-cell.med .metric{color:var(--warn)}
+  .risk-cell.crit{background:#FCE8E8;border:1px solid var(--accent)}.risk-cell.crit .metric{color:#A01010}
+
+  .impact-bar{margin-bottom:10px}
+  .impact-bar .lbl{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;color:var(--muted)}
+  .impact-bar .track{height:8px;border-radius:4px;background:var(--gray2);overflow:hidden}
+  .impact-bar .fill{height:100%;border-radius:4px;transition:width .8s ease}
+  .fill-red{background:var(--accent)}
+  .fill-warn{background:var(--warn)}
+  .fill-blue{background:var(--blue)}
+
+  .lesson{display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--border)}
+  .lesson:last-child{border-bottom:none}
+  .lesson-num{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+  .lesson-text{font-size:13.5px;line-height:1.6;color:var(--text)}
+
+  .rec{display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--border)}
+  .rec:last-child{border-bottom:none}
+  .rec-icon{font-size:16px;flex-shrink:0;width:24px;text-align:center;margin-top:2px}
+  .rec-text{font-size:13.5px;line-height:1.6}
+  .rec-text strong{font-weight:500;color:var(--text);display:block}
+  .rec-text span{color:var(--muted);font-size:13px}
+
+  .linkedin-box{background:var(--blue-light);border:0.5px solid var(--blue);border-radius:10px;padding:1.25rem}
+  .linkedin-box .lbl{font-size:11px;font-weight:600;color:var(--blue);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+  .linkedin-post{font-size:13.5px;line-height:1.75;color:var(--text);white-space:pre-line}
+
+  .oneliner{background:var(--accent);color:#fff;border-radius:10px;padding:1rem 1.25rem;margin-bottom:1rem;font-size:14px;font-style:italic;line-height:1.6}
+
+  .attack-flow{margin:1rem 0}
+  .af-step{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:0.5px dashed var(--border)}
+  .af-step:last-child{border-bottom:none}
+  .af-num{min-width:28px;height:28px;border-radius:50%;background:var(--gray2);border:0.5px solid var(--border);font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--muted)}
+  .af-content strong{font-size:13px;font-weight:500;color:var(--text);display:block}
+  .af-content span{font-size:12px;color:var(--muted)}
+  .af-step.critical .af-num{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .af-step.critical .af-content strong{color:var(--accent)}
+</style>
+
+<div class="header">
+  <div class="badge-row">
+    <span class="badge badge-red">CRITICAL SEVERITY</span>
+    <span class="badge badge-warn">THIRD-PARTY BREACH</span>
+    <span class="badge badge-blue">ONGOING INVESTIGATION</span>
+    <span class="badge badge-purple">BPO SUPPLY CHAIN RISK</span>
+  </div>
+  <h1>Crunchyroll Data Breach<br>GRC Incident Analysis</h1>
+  <div class="subtitle">Senior GRC &amp; Cybersecurity Analyst Report</div>
+  <div class="date-chip">Incident Date: March 12, 2026 &nbsp;|&nbsp; Disclosed: March 24, 2026</div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="show('exec')">Executive Summary</button>
+  <button class="nav-btn" onclick="show('overview')">Incident Overview</button>
+  <button class="nav-btn" onclick="show('rca')">Root Cause</button>
+  <button class="nav-btn" onclick="show('grc')">GRC Breakdown</button>
+  <button class="nav-btn" onclick="show('frameworks')">Framework Mapping</button>
+  <button class="nav-btn" onclick="show('risk')">Risk Impact</button>
+  <button class="nav-btn" onclick="show('lessons')">Lessons Learned</button>
+  <button class="nav-btn" onclick="show('recs')">Recommendations</button>
+  <button class="nav-btn" onclick="show('linkedin')">LinkedIn Post</button>
+</div>
+
+<div id="exec" class="section active">
+  <p class="section-title">Executive Summary</p>
+  <div class="exec-highlight">
+    <p>On March 12, 2026, threat actors breached Crunchyroll — Sony's anime streaming platform serving 15M+ subscribers — by compromising the Okta SSO credentials of a third-party BPO support agent at Telus International via malware. Within 24 hours, attackers exfiltrated approximately 100GB of user data including 6.8M email addresses, IP addresses, and partial credit card details from Zendesk, Slack, Google Workspace, and analytics systems.</p>
+  </div>
+  <div class="exec-highlight" style="background:var(--warn-light);border-left-color:var(--warn)">
+    <p>Despite detecting and revoking access within 24 hours, Crunchyroll's delayed public disclosure — 12 days post-breach — and failure to proactively notify affected users raises significant GDPR, CCPA, and governance concerns. The incident is a textbook case of third-party risk management failure and BPO supply chain vulnerability.</p>
+  </div>
+  <div class="exec-highlight" style="background:var(--ok-light);border-left-color:var(--ok)">
+    <p>The attacker demanded $5 million in ransom and received no response. While containment was achieved quickly, the volume of data exfiltrated in under 24 hours signals pre-planned lateral movement and inadequate data minimization, access scoping, and third-party monitoring controls.</p>
+  </div>
+</div>
+
+<div id="overview" class="section">
+  <p class="section-title">Incident Overview</p>
+  <div class="info-grid">
+    <div class="info-item"><div class="lbl">Organization</div><div class="val">Crunchyroll (Sony / Aniplex JV)</div></div>
+    <div class="info-item"><div class="lbl">Breach Date</div><div class="val">March 12, 2026, 9:00 PM EST</div></div>
+    <div class="info-item"><div class="lbl">Disclosed</div><div class="val">March 24, 2026 (12-day delay)</div></div>
+    <div class="info-item"><div class="lbl">Breach Type</div><div class="val">Third-Party / BPO Supply Chain</div></div>
+    <div class="info-item"><div class="lbl">Initial Vector</div><div class="val">Malware → Okta SSO credential theft</div></div>
+    <div class="info-item"><div class="lbl">Third Party</div><div class="val">Telus International (India BPO)</div></div>
+    <div class="info-item"><div class="lbl">Data Exfiltrated</div><div class="val">~100GB / 8M support ticket records</div></div>
+    <div class="info-item"><div class="lbl">Users Affected</div><div class="val">~6.8 Million unique email addresses</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Data Compromised</div>
+    <p>Email addresses (6.8M unique), IP addresses, partial credit card information, customer analytics data (PII), support ticket contents, and internal access to Zendesk, Jira, Slack, Google Workspace, Mixpanel, MaestroQA, and Wizer platforms.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Attack Flow</div>
+    <div class="attack-flow">
+      <div class="af-step critical"><div class="af-num">1</div><div class="af-content"><strong>Phishing → Malware Execution</strong><span>Telus International support agent (India) executes malware on workstation — credential theft initiated</span></div></div>
+      <div class="af-step critical"><div class="af-num">2</div><div class="af-content"><strong>Okta SSO Account Compromised</strong><span>Stolen credentials used to authenticate into Crunchyroll's Okta SSO environment</span></div></div>
+      <div class="af-step critical"><div class="af-num">3</div><div class="af-content"><strong>Lateral Movement Across Platforms</strong><span>Access pivoted to Zendesk, Slack, Google Workspace, Jira, Mixpanel, MaestroQA, Wizer</span></div></div>
+      <div class="af-step critical"><div class="af-num">4</div><div class="af-content"><strong>Mass Data Exfiltration</strong><span>8M support tickets downloaded; 100GB analytics PII exfiltrated — all within 24 hours</span></div></div>
+      <div class="af-step"><div class="af-num">5</div><div class="af-content"><strong>Access Revoked by Crunchyroll</strong><span>Unauthorized access detected and cut off approximately 24 hours after breach began</span></div></div>
+      <div class="af-step"><div class="af-num">6</div><div class="af-content"><strong>$5M Ransom Demand Sent</strong><span>Threat actor contacts Crunchyroll demanding $5 million — no response given; breach surfaced publicly March 22–24</span></div></div>
+    </div>
+  </div>
+</div>
+
+<div id="rca" class="section">
+  <p class="section-title">Root Cause Analysis</p>
+  <div class="card">
+    <div class="card-title">Core Technical Failures</div>
+    <p style="margin-bottom:8px">The breach chain involved three compounding technical failures:</p>
+    <div class="attack-flow">
+      <div class="af-step"><div class="af-num">T1</div><div class="af-content"><strong>No MFA or phishing-resistant authentication on BPO agent accounts</strong><span>Malware-stolen credentials were sufficient to authenticate into Okta SSO without additional verification barriers</span></div></div>
+      <div class="af-step"><div class="af-num">T2</div><div class="af-content"><strong>Excessive privilege scope granted to BPO agents</strong><span>A single support agent's Okta account provided access to 6+ production systems. Principle of least privilege was not enforced.</span></div></div>
+      <div class="af-step"><div class="af-num">T3</div><div class="af-content"><strong>No real-time anomalous behavior detection on third-party sessions</strong><span>Mass download of 8M records over 24 hours was not flagged or blocked by DLP or UEBA controls</span></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Core Organizational Failures</div>
+    <div class="attack-flow">
+      <div class="af-step"><div class="af-num">O1</div><div class="af-content"><strong>Third-Party Risk Management (TPRM) gap</strong><span>Telus International's security posture — endpoint protection, phishing training, MFA — was not adequately assessed or contractually enforced</span></div></div>
+      <div class="af-step"><div class="af-num">O2</div><div class="af-content"><strong>Process failure: No mandatory MFA for external vendor SSO access</strong><span>The policy gap allowed a malware-compromised credential to be the sole authentication factor</span></div></div>
+      <div class="af-step"><div class="af-num">O3</div><div class="af-content"><strong>Disclosure process failure</strong><span>12-day delay between breach detection and public disclosure violates the spirit of GDPR 72-hour notification requirements and CCPA obligations</span></div></div>
+    </div>
+  </div>
+  <div class="card" style="border-left:3px solid var(--accent)">
+    <div class="card-title">Root Cause Classification</div>
+    <p><strong style="color:var(--accent)">Primary:</strong> Process failure — absence of mandatory phishing-resistant MFA for third-party vendor access to production SSO systems.<br><br><strong style="color:var(--warn)">Secondary:</strong> Control gap — inadequate TPRM oversight, excessive BPO access scope, and absence of DLP/UEBA monitoring for third-party sessions.<br><br><strong style="color:var(--blue)">Contributing:</strong> Human error — Telus agent executed malware on a corporate device, pointing to insufficient endpoint security and security awareness training at the vendor level.</p>
+  </div>
+</div>
+
+<div id="grc" class="section">
+  <p class="section-title">GRC Breakdown</p>
+  <div class="grc-block gov">
+    <h3>Governance Failures</h3>
+    <ul>
+      <li>No board-level visibility into BPO vendor security standards — Telus International's endpoint and MFA posture was not a monitored governance metric</li>
+      <li>Absence of a Third-Party Risk Committee or structured vendor security review cadence</li>
+      <li>Delayed incident disclosure decision-making — 12 days is a governance failure, not just a legal one</li>
+      <li>No clear ownership of BPO access policy within Crunchyroll's security org — evidenced by lack of MFA enforcement on Okta for third parties</li>
+      <li>Data classification policy appears absent or unenforced — 6.8M email records and financial data accessible to support agents without data minimization controls</li>
+    </ul>
+  </div>
+  <div class="grc-block risk">
+    <h3>Risk Failures</h3>
+    <ul>
+      <li>BPO supply chain risk was not identified or rated as a high-likelihood threat vector — despite a well-documented industry trend of BPO-targeted attacks</li>
+      <li>Risk assessment did not account for credential compromise at the vendor level as a plausible attack path</li>
+      <li>No compensating controls were in place for the identified risk of SSO compromise — the single point of failure was known but unmitigated</li>
+      <li>Data volume accessible per third-party session was not treated as a risk amplifier — 8M records downloadable by one compromised session is a critical risk gap</li>
+      <li>Residual risk from BPO access to multi-platform environments (Zendesk + Slack + Analytics) was never formally quantified</li>
+    </ul>
+  </div>
+  <div class="grc-block comp">
+    <h3>Compliance Failures</h3>
+    <ul>
+      <li>GDPR Article 33: Breach notification to supervisory authority within 72 hours was likely missed — 12-day delay is a clear compliance gap</li>
+      <li>GDPR Article 34: No evidence of timely individual notification to 6.8M affected EU-region users</li>
+      <li>CCPA: California-based subscribers require timely breach notification — delay exposes Sony to regulatory enforcement</li>
+      <li>PCI-DSS: Partial credit card data in support tickets suggests cardholder data was accessible in non-PCI-scoped environments — potential Requirement 3 violation</li>
+      <li>ISO 27001 Annex A.15 (Supplier Relationships): No evidence of security requirements formally embedded in Telus International contract</li>
+    </ul>
+  </div>
+</div>
+
+<div id="frameworks" class="section">
+  <p class="section-title">Control &amp; Framework Mapping</p>
+  <p class="section-sub">Mapping breach failures to applicable standards and controls</p>
+
+  <div style="margin-bottom:1rem">
+    <div style="font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;padding:8px 0;border-bottom:0.5px solid var(--border)">ISO 27001:2022 — Annex A</div>
+    <div class="framework-row"><span class="fw-badge fw-iso">A.5.19</span><div class="fw-text">Information security in supplier relationships — No evidence of security clauses enforced in Telus contract<span class="fw-control">FAILED: Vendor security requirements not contractually mandated</span></div></div>
+    <div class="framework-row"><span class="fw-badge fw-iso">A.5.23</span><div class="fw-text">Information security for use of cloud services — Okta SSO is a critical cloud identity service; third-party access not hardened<span class="fw-control">FAILED: No MFA enforcement for vendor cloud service access</span></div></div>
+    <div class="framework-row"><span class="fw-badge fw-iso">A.8.2</span><div class="fw-text">Privileged access rights — BPO support agent had excessive cross-system privileges<span class="fw-control">FAILED: Principle of least privilege not applied to third-party accounts</span></div></div>
+    <div class="framework-row"><span class="fw-badge fw-iso">A.8.12</span><div class="fw-text">Data leakage prevention — No DLP controls to detect or block mass data exfiltration<span class="fw-control">FAILED: 8M records exfiltrated without DLP alert or block</span></div></div>
+    <div class="framework-row"><span class="fw-badge fw-iso">A.5.26</span><div class="fw-text">Response to information security incidents — 12-day delay in public disclosure indicates immature IR process<span class="fw-control">FAILED: Incident response and disclosure procedure not followed</span></div></div>
+  </div>
+
+  <div style="margin-bottom:1rem">
+    <div style="font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;padding:8px 0;border-bottom:0.5px solid var(--border)">SOC 2 — Trust Service Criteria</div>
+    <div class="framework-row"><span class="fw-badge fw-soc">CC6.1</span><div class="fw-text">Logical and physical access controls — Okta SSO with no MFA for BPO agents<span class="fw-control">FAILED: Access control insufficient for privileged external identities</span></div></div>
+    <div class="framework-row"><span class="fw-badge fw-soc">CC6.3</span><div class="fw-text">Role-based access — Single agent account accessed 6+ systems<span class="fw-control">FAILED: Excessive role scope not controlled</span></div></div>
+    <div class="framework-row"><span class="fw-badge fw-soc">CC7.2</span><div class="fw-text">System monitoring — Anomalous bulk download not detected for 24 hours<span class="fw-control">FAILED: No real-time behavioral anomaly detection on third-party sessions</span></div></div>
+    <div class="framework-row"><span class="fw-badge fw-soc">CC9.2</span><div class="fw-text">Vendor and business partner risk management — No continuous monitoring of Telus security posture<span class="fw-control">FAILED: TPRM program absent or inadequate</span></div></div>
+  </div>
+
+  <div style="margin-bottom:1rem">
+    <div style="font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;padding:8px 0;border-bottom:0.5px solid var(--border)">GDPR / CCPA / PCI-DSS</div>
+    <div class="framework-row"><span class="fw-badge fw-gdpr">GDPR Art.33</span><div class="fw-text">72-hour supervisory authority notification — Breach confirmed internally March 12; public acknowledgment March 24<span class="fw-control">LIKELY VIOLATED: 12-day gap exceeds regulatory window</span></div></div>
+    <div class="framework-row"><span class="fw-badge fw-gdpr">GDPR Art.5(1)(c)</span><div class="fw-text">Data minimisation — 6.8M records accessible to BPO support agents far exceeds what is necessary<span class="fw-control">FAILED: Excessive data accessible in support environment</span></div></div>
+    <div class="framework-row"><span class="fw-badge fw-gdpr">CCPA §1798.82</span><div class="fw-text">California breach notification — 15M+ subscriber base includes CA residents; disclosure delay triggers liability<span class="fw-control">AT RISK: Exposure to CPPA regulatory enforcement</span></div></div>
+    <div class="framework-row"><span class="fw-badge fw-gdpr">PCI-DSS Req.3</span><div class="fw-text">Protection of stored cardholder data — Partial card data present in support tickets outside PCI scope<span class="fw-control">POTENTIAL VIOLATION: Cardholder data in non-compliant environment</span></div></div>
+  </div>
+
+  <div>
+    <div style="font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;padding:8px 0;border-bottom:0.5px solid var(--border)">NIST CSF 2.0</div>
+    <div class="framework-row"><span class="fw-badge fw-nist">ID.SC</span><div class="fw-text">Supply chain risk management — Telus not properly assessed as a critical supplier<span class="fw-control">FAILED: No supply chain risk identification for BPO</span></div></div>
+    <div class="framework-row"><span class="fw-badge fw-nist">PR.AC</span><div class="fw-text">Identity management and access control — Okta SSO without MFA for external identities<span class="fw-control">FAILED: Access control not commensurate with risk level</span></div></div>
+    <div class="framework-row"><span class="fw-badge fw-nist">DE.AE</span><div class="fw-text">Anomalies and events detection — 24-hour undetected exfiltration window<span class="fw-control">FAILED: Detection capability insufficient</span></div></div>
+    <div class="framework-row"><span class="fw-badge fw-nist">RS.CO</span><div class="fw-text">Response communications — 12-day delay to public disclosure<span class="fw-control">FAILED: Communication plan not executed per IR policy</span></div></div>
+  </div>
+</div>
+
+<div id="risk" class="section">
+  <p class="section-title">Risk Impact Analysis</p>
+  <div class="risk-matrix">
+    <div class="risk-cell crit"><div class="metric">CRITICAL</div><div class="label">Overall Risk Rating</div></div>
+    <div class="risk-cell high"><div class="metric">HIGH</div><div class="label">Likelihood of Recurrence (industry)</div></div>
+    <div class="risk-cell high"><div class="metric">$50M+</div><div class="label">Potential Regulatory Exposure (est.)</div></div>
+    <div class="risk-cell med"><div class="metric">6.8M</div><div class="label">Users at Phishing / Fraud Risk</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Business Impact Areas</div>
+    <div class="impact-bar"><div class="lbl"><span>Reputational Damage</span><span>Critical</span></div><div class="track"><div class="fill fill-red" style="width:92%"></div></div></div>
+    <div class="impact-bar"><div class="lbl"><span>Regulatory / Legal Exposure</span><span>High</span></div><div class="track"><div class="fill fill-red" style="width:82%"></div></div></div>
+    <div class="impact-bar"><div class="lbl"><span>Customer Churn Risk</span><span>High</span></div><div class="track"><div class="fill fill-warn" style="width:75%"></div></div></div>
+    <div class="impact-bar"><div class="lbl"><span>Financial (fines + remediation)</span><span>High</span></div><div class="track"><div class="fill fill-warn" style="width:70%"></div></div></div>
+    <div class="impact-bar"><div class="lbl"><span>Operational Disruption</span><span>Medium</span></div><div class="track"><div class="fill fill-blue" style="width:45%"></div></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Financial Exposure Breakdown</div>
+    <p><strong style="color:var(--accent)">GDPR Fines:</strong> Up to 4% of Sony's global annual turnover (~$3.1B annual revenue for Sony Pictures division) — potential exposure in hundreds of millions if EU DPAs find violations of Art.33 and Art.5.<br><br><strong style="color:var(--warn)">CCPA/CPPA Enforcement:</strong> Up to $7,500 per intentional violation per consumer — 6.8M affected users represents theoretically massive exposure.<br><br><strong style="color:var(--blue)">Incident Response Costs:</strong> Forensic investigation, breach notification, credit monitoring for 6.8M users, legal fees, and potential class-action settlements — estimated $20–50M based on comparable incidents.<br><br><strong style="color:var(--ok)">Subscriber Impact:</strong> Crunchyroll is actively mid-restructuring with ongoing layoffs; brand trust erosion at this moment is particularly damaging to subscriber retention.</p>
+  </div>
+
+  <div class="card" style="border-left:3px solid var(--accent)">
+    <div class="card-title">Qualitative Risk Rating</div>
+    <p><strong>Likelihood:</strong> Very High — BPO-targeted attacks via credential theft and phishing are one of the fastest-growing threat vectors in 2025–26. Multiple similar incidents (Discord/Zendesk, Telus Digital itself) confirm this is a repeatable pattern.<br><br><strong>Impact:</strong> Critical — Mass PII exposure including financial data of 6.8M users, regulatory violations across multiple jurisdictions, and reputational damage during a period of active subscriber scrutiny.<br><br><strong>Overall Risk:</strong> <span style="color:var(--accent);font-weight:500">CRITICAL</span> — The combination of high likelihood, multi-jurisdictional regulatory exposure, and reputational timing makes this a crisis-tier incident.</p>
+  </div>
+</div>
+
+<div id="lessons" class="section">
+  <p class="section-title">Lessons Learned</p>
+  <div class="card">
+    <div class="lesson"><div class="lesson-num">1</div><div class="lesson-text"><strong style="color:var(--text)">Your security posture is only as strong as your weakest vendor.</strong> A single Telus support agent with malware became the entry point into Crunchyroll's entire customer data ecosystem. BPO security standards must be treated as an extension of your own.</div></div>
+    <div class="lesson"><div class="lesson-num">2</div><div class="lesson-text"><strong style="color:var(--text)">MFA is non-negotiable for SSO access to production systems — including for third parties.</strong> Phishing-resistant MFA (hardware keys, passkeys) on Okta would have broken the attack chain entirely at Step 1.</div></div>
+    <div class="lesson"><div class="lesson-num">3</div><div class="lesson-text"><strong style="color:var(--text)">Data minimization is a security control, not just a compliance checkbox.</strong> Support agents should never have had access to 8M records. Scope-limited, session-scoped, and just-in-time access models would have radically reduced blast radius.</div></div>
+    <div class="lesson"><div class="lesson-num">4</div><div class="lesson-text"><strong style="color:var(--text)">100GB exfiltrated in 24 hours means DLP was absent or ineffective.</strong> Volume-based and behavioral anomaly detection on third-party sessions is not optional for platforms handling millions of user records.</div></div>
+    <div class="lesson"><div class="lesson-num">5</div><div class="lesson-text"><strong style="color:var(--text)">Delayed disclosure compounds legal and reputational harm.</strong> 12 days is not a 72-hour notification window. Incident response plans must include a pre-approved disclosure playbook that activates automatically at breach confirmation — not after days of internal deliberation.</div></div>
+    <div class="lesson"><div class="lesson-num">6</div><div class="lesson-text"><strong style="color:var(--text)">BPO vendors holding your customer data are Tier 1 suppliers — treat them accordingly.</strong> Telus International had access to Crunchyroll's crown jewels. Contractual security standards, regular audits, and shared incident response plans are baseline expectations, not optional extras.</div></div>
+    <div class="lesson"><div class="lesson-num">7</div><div class="lesson-text"><strong style="color:var(--text)">Partial credit card data in support tickets is a PCI-DSS violation waiting to happen.</strong> Cardholder data must be purged from support environments. This is a data hygiene failure that regulators will not overlook.</div></div>
+  </div>
+</div>
+
+<div id="recs" class="section">
+  <p class="section-title">Recommendations</p>
+  <div class="card">
+    <div class="rec"><div class="rec-icon">🔐</div><div class="rec-text"><strong>Enforce phishing-resistant MFA on all SSO access for third-party vendors (Immediate)</strong><span>Deploy FIDO2/passkey authentication on Okta for all BPO and vendor accounts. Password-only or TOTP access to production systems must be eliminated within 30 days.</span></div></div>
+    <div class="rec"><div class="rec-icon">🎯</div><div class="rec-text"><strong>Implement Zero Trust access architecture for BPO accounts (0–90 days)</strong><span>Apply just-in-time (JIT) access provisioning, session-scoped permissions, and device posture checks. No BPO agent should have persistent, multi-platform access via a single credential.</span></div></div>
+    <div class="rec"><div class="rec-icon">📊</div><div class="rec-text"><strong>Deploy UEBA and DLP with third-party session monitoring (30–60 days)</strong><span>Implement User and Entity Behavior Analytics tuned to detect bulk downloads by external identities. DLP rules must alert and block on mass data access patterns from BPO accounts.</span></div></div>
+    <div class="rec"><div class="rec-icon">📋</div><div class="rec-text"><strong>Establish a formal Third-Party Risk Management (TPRM) program (60–90 days)</strong><span>All BPO and critical vendors must be assessed against security standards (ISO 27001 / SOC 2 Type II), with annual re-assessment and contractual right-to-audit clauses embedded in agreements.</span></div></div>
+    <div class="rec"><div class="rec-icon">🔔</div><div class="rec-text"><strong>Rebuild the incident disclosure playbook (Immediate)</strong><span>Create a pre-approved, legally reviewed communication playbook that triggers within 24 hours of breach confirmation. GDPR 72-hour notification compliance must be a hard process deadline — not a discretionary decision.</span></div></div>
+    <div class="rec"><div class="rec-icon">🗂️</div><div class="rec-text"><strong>Enforce data minimization across support environments (30–60 days)</strong><span>Support agents should have access only to data relevant to their current ticket. Implement field-level masking, record-count caps per session, and purge financial data from support ticket systems immediately.</span></div></div>
+    <div class="rec"><div class="rec-icon">💳</div><div class="rec-text"><strong>Audit and remediate PCI-DSS exposure in support tooling (Immediate)</strong><span>Identify and purge all cardholder data from Zendesk and support ticket records. Engage a QSA to assess scope expansion and remediate any Requirement 3 violations.</span></div></div>
+    <div class="rec"><div class="rec-icon">🛡️</div><div class="rec-text"><strong>Mandate endpoint security standards for BPO partners (30 days)</strong><span>Require Telus and all BPO partners to demonstrate EDR coverage, OS patching SLAs, and phishing simulation training frequency as contractual obligations — validated via quarterly attestations.</span></div></div>
+    <div class="rec"><div class="rec-icon">🔍</div><div class="rec-text"><strong>Conduct a full supply chain security review of all BPO relationships (60–90 days)</strong><span>Map all third parties with access to production systems. Assign risk tiers, enforce MFA and least-privilege policies, and retire any legacy vendor access grants that cannot be brought into compliance.</span></div></div>
+  </div>
+</div>
+
+<div id="linkedin" class="section">
+  <p class="section-title">LinkedIn-Ready Content</p>
+  <div class="oneliner">
+    "The Crunchyroll breach is a blunt reminder: your data is only as secure as the most vulnerable employee in your BPO's supply chain — and if you don't mandate MFA, least-privilege access, and real-time monitoring for every vendor touching your production systems, you don't have a security program, you have a liability waiting to happen."
+  </div>
+  <div class="linkedin-box">
+    <div class="lbl">LinkedIn Post</div>
+    <div class="linkedin-post">🔴 Crunchyroll Data Breach (March 2026) — A GRC Wake-Up Call
+
+On March 12, 2026, a single malware-infected endpoint at Telus International — a BPO support partner — gave threat actors full access to Crunchyroll's Okta SSO. In under 24 hours, 100GB of data was exfiltrated: 6.8M email addresses, IP addresses, and partial credit card details.
+
+Here's what every GRC professional needs to take from this:
+
+🔐 MFA was not enforced for third-party SSO access. One stolen credential = full production access.
+
+📊 8 million support ticket records were downloaded before a single alert fired. DLP was either absent or silent.
+
+🧩 A BPO support agent had access to Zendesk, Slack, Google Workspace, Jira, Mixpanel, and analytics systems simultaneously. That's not least privilege. That's a loaded gun.
+
+⏱️ Crunchyroll detected and revoked access in 24 hours — but took 12 days to publicly disclose. GDPR's 72-hour clock started at detection, not at press release.
+
+The attack vector isn't new. BPO credential compromise has hit Discord, Grubhub, and now Crunchyroll. The playbook is the same every time:
+
+✅ Phish or malware an agent
+✅ Steal SSO credentials
+✅ Walk through every door they have access to
+✅ Download everything
+
+The fix isn't complicated:
+
+→ Phishing-resistant MFA on all vendor SSO access (mandatory)
+→ Just-in-time, scoped access for BPO agents (not persistent multi-system access)
+→ UEBA + DLP tuned for third-party session anomalies
+→ Pre-approved 72-hour breach disclosure playbook
+→ Formal TPRM program with contractual security standards for all BPO partners
+
+Your supply chain is your attack surface. Treat it accordingly.
+
+#GRC #Cybersecurity #DataBreach #SupplyChainSecurity #Crunchyroll #TPRM #ISO27001 #GDPR #IncidentResponse</div>
+  </div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
